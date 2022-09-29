@@ -32,6 +32,16 @@ app.get("/", async (req, res) => {
 	}
 });
 
+app.get("/Movies", async (req, res) => {
+	const cinema = await client.lRange("movies", 0, -1);
+	res.render("list", { title: "movies", newListItems: cinema });
+});
+
+app.get("/:type", (req, res) => {
+	const listType = req.params.type;
+
+});
+
 app.post("/del", async (req, res) => {
 	const cinema = await client.lRange("movies", 0, -1);
 	if (cinema.includes(req.body.box)) {
@@ -57,11 +67,6 @@ app.post("/", (req, res) => {
 
 		res.redirect("/");
 	}
-});
-
-app.get("/Movies", async (req, res) => {
-	const cinema = await client.lRange("movies", 0, -1);
-	res.render("list", { title: "movies", newListItems: cinema });
 });
 
 // client.quit()
