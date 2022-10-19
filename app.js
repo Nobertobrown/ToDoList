@@ -23,13 +23,7 @@ app.get("/", async (req, res) => {
   const result = await client.lRange("todoList", 0, -1);
 
   if (result.length === 0) {
-    const multi = client.multi();
-    const todoList = ["Wake Up", "Brush My Teeth", "Go to work"];
-    todoList.forEach((todo) => {
-      multi.rPush("todoList", todo);
-    });
-    multi.exec();
-    res.redirect("/");
+    res.render("list", { title: day, newListItems: Array.apply(null) });
   } else {
     res.render("list", { title: day, newListItems: result });
   }
@@ -43,13 +37,10 @@ app.get("/:customListName", async (req, res) => {
     const List = await client.lRange(customListName, 0, -1);
     res.render("list", { title: customListName, newListItems: List });
   } else {
-    const multi = client.multi();
-    const customList = ["Have fun!", "Play Games!", "Watch Movies!"];
-    customList.forEach((item) => {
-      multi.rPush(customListName, item);
+    res.render("list", {
+      title: customListName,
+      newListItems: Array.apply(null),
     });
-    multi.exec();
-    res.render("list", { title: customListName, newListItems: customList });
   }
 });
 
